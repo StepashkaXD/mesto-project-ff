@@ -32,4 +32,3 @@ initialCards.forEach((initialCards, deleteCard) => {
     toDelete.remove();
   };
 });
-
