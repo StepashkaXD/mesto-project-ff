@@ -7,18 +7,18 @@
 // @todo: Функция удаления карточки
 
 // @todo: Вывести карточки на страницу
-
+'use strict'
 const cardTemplate = document.querySelector("#card-template").content;
 const placesList = document.querySelector(".places__list");
 
-createCard = (initialCards, toDelete) => {
+function createCard(cardData, toDelete) {
   const cardElement = cardTemplate
     .querySelector(".places__item")
     .cloneNode(true);
 
-  cardElement.querySelector(".card__image").src = initialCards.link;
-  cardElement.querySelector(".card__image").alt = initialCards.name;
-  cardElement.querySelector(".card__title").textContent = initialCards.name;
+  cardElement.querySelector(".card__image").src = cardData.link;
+  cardElement.querySelector(".card__image").alt = cardData.name;
+  cardElement.querySelector(".card__title").textContent = cardData.name;
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
   deleteButton.addEventListener("click", () => {
@@ -28,13 +28,15 @@ createCard = (initialCards, toDelete) => {
   return cardElement;
 };
 
-handleDeleteCard = (cardElement) => {
+function handleDeleteCard(cardElement) {
   cardElement.remove();
 };
 
-renderCard = (initialCards) => {
-  const cardElement = createCard(initialCards, handleDeleteCard);
+function renderCard(cardData) {
+  const cardElement = createCard(cardData, handleDeleteCard);
   placesList.append(cardElement);
 };
 
 initialCards.forEach(renderCard);
+
+
