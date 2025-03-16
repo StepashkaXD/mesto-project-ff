@@ -1,59 +1,33 @@
-export function initPopup(popup, target, form = null) {
-  const buttonClose = popup.querySelectorAll(".popup__close");
-
-  function openPopup() {
-    popup.classList.add("popup_is-opened");
-    document.addEventListener("keydown", handleEsc);
-  }
-
-  function closePopup() {
-    popup.classList.remove("popup_is-opened");
-    document.removeEventListener("keydown", handleEsc);
-    if (form) {
-      form.reset();
-    }
-  }
-
-  function handleEsc(event) {
-    if (event.key === "Escape") {
-      closePopup();
-    }
-  }
-
-  target.addEventListener("click", () => {
-    openPopup();
-  });
-
-  popup.addEventListener("click", (event) => {
-    if (event.target === popup) {
-      closePopup();
-    }
-  });
-
-  buttonClose.forEach((button) => {
-    button.addEventListener("click", (evt) => {
-      evt.preventDefault(), 
-      closePopup();
-    });
-  });
-
-  if (form) {
-    form.addEventListener("submit", (evt) => {
-      evt.preventDefault(), closePopup();
-    });
-  }
-  return { openPopup, closePopup };
+export function openPopup(popup) {
+  popup.classList.add("popup_is-opened");
+  document.addEventListener("keydown", handleEsc);
 }
 
-export function openCardPopup(cardData) {
-  const popupTypeImage = document.querySelector(".popup_type_image");
-  const popupImage = popupTypeImage.querySelector(".popup__image");
-  const popupImageDescription = popupTypeImage.querySelector(".popup__caption");
+export function closePopup(popup) {
+  popup.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", handleEsc);
+}
 
-  popupImage.src = cardData.link;
-  popupImage.alt = cardData.name;
-  popupImageDescription.textContent = cardData.name;
+export function handleEsc(event) {
+  if (event.key === "Escape") {
+    const openedPopup = document.querySelector(".popup_is-opened");
+    if (openedPopup) {
+      closePopup(openedPopup);
+    }
+  }
+}
 
-  const { openPopup } = initPopup(popupTypeImage, popupImage);
-  openPopup();
+export function initPopups() {
+  const popups = document.querySelectorAll(".popup");
+  popups.forEach((popup) => {
+    popup.addEventListener("click", (evt) => {
+      if (
+        evt.target.classList.contains("popup") 
+        ||
+        evt.target.classList.contains("popup__close")
+      ) {
+        closePopup(popup);
+      }
+    });
+  });
 }
