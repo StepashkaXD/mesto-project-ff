@@ -1,6 +1,6 @@
 import { createCard, handleDeleteCard, handleLikeCard } from "./card.js";
 import { closePopup, openPopup } from "./popup.js";
-import { openCardPopup } from "../index.js"
+import { openCardPopup, placesList } from "../index.js";
 
 export function initNewPlaceForm() {
   const formNewPlace = document.forms.new_place;
@@ -23,22 +23,11 @@ export function initNewPlaceForm() {
     const cardElement = createCard(
       cardData,
       handleDeleteCard,
-      (cardData) => {
-        const popupImage = document.querySelector(".popup_type_image");
-        const imagePopup = popupImage.querySelector(".popup__image");
-        const descriptionPopup = popupImage.querySelector(".popup__caption");
-
-        imagePopup.src = cardData.link;
-        imagePopup.alt = cardData.name;
-        descriptionPopup.textContent = cardData.name;
-
-        popupImage.classList.add("popup_is-opened");
-        openCardPopup(cardData);
-      },
+      openCardPopup,
       handleLikeCard
     );
 
-    document.querySelector('.places__list').prepend(cardElement);
+    placesList.prepend(cardElement);
     closePopup(popupNewCard);
     formNewPlace.reset();
   });
