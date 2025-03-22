@@ -6,7 +6,7 @@ import { initProfileForm } from "./components/form-profile.js";
 import { initNewPlaceForm } from "./components/form-new-place.js";
 import "./pages/index.css";
 
-const placesList = document.querySelector(".places__list");
+export const placesList = document.querySelector(".places__list");
 
 const popupTypeImage = document.querySelector(".popup_type_image");
 const popupImage = popupTypeImage.querySelector(".popup__image");
