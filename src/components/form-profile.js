@@ -1,4 +1,5 @@
 import { closePopup, openPopup } from "./popup.js";
+import { resetValidation } from"../index.js";
 
 export function initProfileForm() {
   const formProfile = document.forms.edit_profile;
@@ -11,6 +12,7 @@ export function initProfileForm() {
     formProfile.elements.name.value = titleProfile.textContent;
     formProfile.elements.description.value = descriptionProfile.textContent;
     openPopup(popupProfile);
+    resetValidation(formProfile)
   });
 
   formProfile.addEventListener("submit", (evt) => {

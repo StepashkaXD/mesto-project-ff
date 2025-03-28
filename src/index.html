@@ -43,21 +43,33 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Редактировать профиль</h3>
-          <form class="popup__form" name="edit_profile">
+          <form class="popup__form" name="edit_profile" novalidate>
             <input
               type="text"
               name="name"
               class="popup__input popup__input_type_name"
               placeholder="Имя"
+
+              pattern="^[a-zA-ZA-Яf-яЁё\s\-]+$"
+              minlength="2"
+              maxlength="40"
+              id="name-input"
               required
             />
+            <span class='form__input-error name-input-error'></span>
             <input
               type="text"
               name="description"
               class="popup__input popup__input_type_description"
               placeholder="Занятие"
+
+              pattern="^[a-zA-ZA-Яf-яЁё\s\-]+$"
+              minlength="2"
+              maxlength="200"
+              id="description-input"
               required
             />
+            <span class='form__input-error description-input-error'></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -74,15 +86,24 @@
               name="name"
               class="popup__input popup__input_type_card-name"
               placeholder="Название"
+
+              pattern="^[a-zA-ZA-Яf-яЁё\s\-]+$"
+              minlength="2"
+              maxlength="30"
+              id="name-place-input"
               required
             />
+            <span class='form__input-error name-place-input-error'></span>
             <input
               type="url"
               name="link"
               class="popup__input popup__input_type_url"
               placeholder="Ссылка на картинку"
+
+              id="url-place-input"
               required
             />
+            <span class='form__input-error url-place-input-error'></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
