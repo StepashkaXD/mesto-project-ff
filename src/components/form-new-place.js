@@ -1,6 +1,7 @@
 import { createCard, handleDeleteCard, handleLikeCard } from "./card.js";
 import { closePopup, openPopup } from "./popup.js";
-import { openCardPopup, placesList, toggleButtonState } from "../index.js";
+import { openCardPopup, placesList, validationConfig } from "../index.js";
+import { clearValidation } from "./validation.js";
 
 export function initNewPlaceForm() {
   const formNewPlace = document.forms.new_place;
@@ -9,11 +10,7 @@ export function initNewPlaceForm() {
 
   addButton.addEventListener("click", () => {
     formNewPlace.reset();
-
-    const inputList = Array.from(formNewPlace.querySelectorAll(".popup__input"));
-    const buttonElement = formNewPlace.querySelector(".popup__button");
-    toggleButtonState(inputList, buttonElement);
-    
+    clearValidation(formNewPlace, validationConfig);
     openPopup(popupNewCard);
   });
 

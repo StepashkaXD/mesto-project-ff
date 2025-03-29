@@ -1,5 +1,6 @@
 import { closePopup, openPopup } from "./popup.js";
-import { resetValidation } from"../index.js";
+import { validationConfig } from "../index.js";
+import { clearValidation } from "./validation.js";
 
 export function initProfileForm() {
   const formProfile = document.forms.edit_profile;
@@ -12,7 +13,7 @@ export function initProfileForm() {
     formProfile.elements.name.value = titleProfile.textContent;
     formProfile.elements.description.value = descriptionProfile.textContent;
     openPopup(popupProfile);
-    resetValidation(formProfile)
+    clearValidation(formProfile, validationConfig);
   });
 
   formProfile.addEventListener("submit", (evt) => {
