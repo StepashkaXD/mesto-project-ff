@@ -1,25 +1,48 @@
-import { closePopup, openPopup } from "./popup.js";
-import { validationConfig } from "../index.js";
-import { clearValidation } from "./validation.js";
+export function initProfileForm(settings) {
+  const {
+    profileFormConfig: {
+      editButton,
+      formProfile,
+      titleProfile,
+      descriptionProfile,
+      popupProfile,
+      editProfile,
+    },
+    popupConfig: { 
+      closePopup,
+      openPopup 
+    },
+    validationConfig,
+    clearValidation,
+  } = settings;
 
-export function initProfileForm() {
-  const formProfile = document.forms.edit_profile;
-  const titleProfile = document.querySelector(".profile__title");
-  const descriptionProfile = document.querySelector(".profile__description");
-  const editButton = document.querySelector(".profile__edit-button");
-  const popupProfile = document.querySelector(".popup_type_edit");
-
-  editButton.addEventListener("click", () => {
+  const setFormValues = () => {
     formProfile.elements.name.value = titleProfile.textContent;
     formProfile.elements.description.value = descriptionProfile.textContent;
-    openPopup(popupProfile);
+  };
+
+  const updateProfile = (name, about) => {
+    return editProfile(name, about)
+      .then(() => {
+        titleProfile.textContent = name;
+        descriptionProfile.textContent = about;
+        closePopup(popupProfile);
+      })
+      .catch((error) => {
+        console.error("Ошибка при обновлении профиля:", error);
+      });
+  };
+  
+  editButton.addEventListener("click", () => {
+    setFormValues();
     clearValidation(formProfile, validationConfig);
+    openPopup(popupProfile);
   });
 
   formProfile.addEventListener("submit", (evt) => {
     evt.preventDefault();
-    titleProfile.textContent = formProfile.elements.name.value;
-    descriptionProfile.textContent = formProfile.elements.description.value;
-    closePopup(popupProfile);
+    const name = formProfile.elements.name.value;
+    const about = formProfile.elements.description.value;
+    updateProfile(name, about);
   });
 }

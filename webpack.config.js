@@ -12,7 +12,6 @@ module.exports = {
     filename: "main.js",
     publicPath: "",
   },
-  devtool: "source-map",
   mode: "development",
   devServer: {
     static: path.resolve(__dirname, "./dist"),
@@ -53,4 +52,5 @@ module.exports = {
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
   ],
+  devtool: "source-map"
 };

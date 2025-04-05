@@ -1,12 +1,18 @@
-import { createCard, handleDeleteCard, handleLikeCard } from "./card.js";
-import { closePopup, openPopup } from "./popup.js";
-import { openCardPopup, placesList, validationConfig } from "../index.js";
-import { clearValidation } from "./validation.js";
+export function initNewPlaceForm(settings) {
+  const {
+    newPlaceFormConfig,
+    popupConfig,
+    validationConfig,
+    clearValidation,
+    createCard,
+    handleDeleteCard,
+    handleLikeCard,
+    userId
+  } = settings;
 
-export function initNewPlaceForm() {
-  const formNewPlace = document.forms.new_place;
-  const popupNewCard = document.querySelector(".popup_type_new-card");
-  const addButton = document.querySelector(".profile__add-button");
+  const { addButton, formNewPlace, placesList, popupNewCard, addCard } =
+    newPlaceFormConfig;
+  const { closePopup, openPopup, openCardPopup } = popupConfig;
 
   addButton.addEventListener("click", () => {
     formNewPlace.reset();
@@ -22,14 +28,20 @@ export function initNewPlaceForm() {
       link: formNewPlace.elements.link.value,
     };
 
-    const cardElement = createCard(
-      cardData,
-      handleDeleteCard,
-      openCardPopup,
-      handleLikeCard
-    );
+    addCard(cardData.name, cardData.link)
+      .then((res) => {
+        placesList.prepend(
+        createCard(
+          res,
+          cardData,
+          handleDeleteCard,
+          openCardPopup,
+          handleLikeCard,
+          userId
+        )
+      );
+    });
 
-    placesList.prepend(cardElement);
     closePopup(popupNewCard);
     formNewPlace.reset();
   });
