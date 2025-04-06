@@ -16,23 +16,30 @@ import { openPopup, closePopup, initPopups } from "./components/popup.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
 
 const placesList = document.querySelector(".places__list");
-const popupTypeImage = document.querySelector(".popup_type_image");
-const popupImage = popupTypeImage.querySelector(".popup__image");
-const popupCaption = popupTypeImage.querySelector(".popup__caption");
+const titleProfile = document.querySelector(".profile__title");
+const descriptionProfile = document.querySelector(".profile__description");
+const profileAvatar = document.querySelector(".profile__image");
+
 const formProfile = document.forms.edit_profile;
 const formNewPlace = document.forms.new_place;
 const formAvatar = document.forms.avatar;
-const titleProfile = document.querySelector(".profile__title");
-const descriptionProfile = document.querySelector(".profile__description");
+
+const popupTypeImage = document.querySelector(".popup_type_image");
+const popupImage = popupTypeImage.querySelector(".popup__image");
+const popupCaption = popupTypeImage.querySelector(".popup__caption");
+const popupProfile = document.querySelector(".popup_type_edit");
+const popupNewPlace = document.querySelector(".popup_type_new-card");
+const popupAvatar = document.querySelector(".popup_type_avatar");
+const popupConfirm = document.querySelector(".popup_type_confirm");
+
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
 const avatarButton = document.querySelector(".profile__image-button");
-const profileAvatar = document.querySelector(".profile__image");
-const popupProfile = document.querySelector(".popup_type_edit");
-const popupNewCard = document.querySelector(".popup_type_new-card");
-const popupAvatar = document.querySelector(".popup_type_avatar");
+const confirmButton = document.querySelector(".popup__button-confirm");
 
 let userId = null;
+let cardIdToDelete;
+let cardElementToDelete;
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -42,16 +49,6 @@ const validationConfig = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__input-error_active",
 };
-
-function handleDeleteCard(cardId, cardElement) {
-  deleteCard(cardId)
-    .then(() => {
-      cardElement.remove();
-    })
-    .catch((error) => {
-      console.log("Ошибка при удалении карточки:", error);
-    });
-}
 
 function handleLikeCard(cardId, isLiked, likeButton, likeCounter) {
   const likeAction = isLiked ? unlikeCard : likeCard;
@@ -63,6 +60,23 @@ function handleLikeCard(cardId, isLiked, likeButton, likeCounter) {
     })
     .catch((error) => {
       console.log("Ошибка обновления лайка:", error);
+    });
+}
+
+function handleConfirmToDeleteCard(cardId, cardElement) {
+  cardIdToDelete = cardId;
+  cardElementToDelete = cardElement;
+
+  openPopup(popupConfirm);
+}
+
+function handleDeleteCard(cardId, cardElement) {
+  deleteCard(cardId)
+    .then(() => {
+      cardElement.remove();
+    })
+    .catch((error) => {
+      console.log("Ошибка при удалении карточки:", error);
     });
 }
 
@@ -109,16 +123,17 @@ function handleNewPlaceFormSubmit(evt) {
 
   addCard(name, link)
     .then((newCard) => {
-      const cardElement = createCard(
-        newCard,
-        handleDeleteCard,
-        openCardPopup,
-        handleLikeCard,
-        userId
+      placesList.prepend(
+        createCard(
+          newCard,
+          handleConfirmToDeleteCard,
+          openCardPopup,
+          handleLikeCard,
+          userId
+        )
       );
-      placesList.prepend(cardElement);
       setTimeout(() => {
-        closePopup(popupNewCard);
+        closePopup(popupNewPlace);
       }, 100);
       formNewPlace.reset();
     })
@@ -166,13 +181,18 @@ editButton.addEventListener("click", () => {
 addButton.addEventListener("click", () => {
   formNewPlace.reset();
   clearValidation(formNewPlace, validationConfig);
-  openPopup(popupNewCard);
+  openPopup(popupNewPlace);
 });
 
 avatarButton.addEventListener("click", () => {
   formAvatar.reset();
   clearValidation(formAvatar, validationConfig);
   openPopup(popupAvatar);
+});
+
+confirmButton.addEventListener("click", () => {
+  handleDeleteCard(cardIdToDelete, cardElementToDelete);
+  closePopup(popupConfirm);
 });
 
 formProfile.addEventListener("submit", handleProfileFormSubmit);
@@ -190,7 +210,7 @@ Promise.all([getArrayCards(), getUser()])
       placesList.append(
         createCard(
           cardData,
-          handleDeleteCard,
+          handleConfirmToDeleteCard,
           openCardPopup,
           handleLikeCard,
           userId
