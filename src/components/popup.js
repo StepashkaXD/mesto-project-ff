@@ -1,13 +1,15 @@
 export function openPopup(popup) {
   popup.classList.add("popup_is-opened");
+  document.addEventListener("keydown", handleEscClose);
 }
 
 export function closePopup(popup) {
   popup.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", handleEscClose);
 }
 
-export function handleEsc(event) {
-  if (event.key === "Escape") {
+function handleEscClose(evt) {
+  if (evt.key === "Escape") {
     const openedPopup = document.querySelector(".popup_is-opened");
     if (openedPopup) {
       closePopup(openedPopup);
@@ -15,8 +17,9 @@ export function handleEsc(event) {
   }
 }
 
- export function initPopups() {
+export function initPopups() {
   const popups = document.querySelectorAll(".popup");
+
   popups.forEach((popup) => {
     popup.addEventListener("click", (evt) => {
       if (
@@ -27,6 +30,4 @@ export function handleEsc(event) {
       }
     });
   });
-
-  document.addEventListener("keydown", handleEsc);
 }

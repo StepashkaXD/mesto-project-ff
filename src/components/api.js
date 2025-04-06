@@ -47,18 +47,18 @@ export const editAvatar = (link) => {
       avatar: link,
     }),
   }).then(testResponse);
-}
+};
 
 export const addCard = (name, link) => {
   return fetch(url + "/cards", {
-    method: 'POST',
+    method: "POST",
     headers: headers.config,
     body: JSON.stringify({
       name: name,
       link: link,
     }),
   }).then(testResponse);
-}
+};
 
 export const deleteCard = (cardId) => {
   return fetch(url + "/cards/" + cardId, {
@@ -80,4 +80,3 @@ export const unlikeCard = (cardId) => {
     headers: headers.config,
   }).then(testResponse);
 };
-
