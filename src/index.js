@@ -50,9 +50,9 @@ const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_inactive",
+  inactiveButtonClass: "popup__button_disabled",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__input-error_active",
+  errorClass: "popup__error_visible"
 };
 
 function handleLikeCard(cardId, isLiked, likeButton, likeCounter) {
@@ -86,9 +86,22 @@ function handleDeleteCard(cardId, cardElement) {
 }
 
 function openCardPopup(cardData) {
-  popupImage.src = cardData.link;
   popupImage.alt = cardData.name;
   popupCaption.textContent = cardData.name;
+
+  // Проверяем загрузку изображения
+  const img = new Image();
+  img.onload = () => {
+    popupImage.src = cardData.link;
+    popupImage.style.display = 'block';
+    popupImage.parentElement.textContent = '';
+  };
+  img.onerror = () => {
+    popupImage.style.display = 'none';
+    popupImage.parentElement.textContent = 'НЕТ ФОТО';
+  };
+  img.src = cardData.link;
+
   openPopup(popupTypeImage);
 }
 
@@ -208,6 +221,8 @@ initPopups();
 
 Promise.all([getArrayCards(), getUser()])
   .then(([cardsData, userData]) => {
+    console.log('Получены данные карточек:', cardsData);
+    console.log('Получены данные пользователя:', userData);
     updateUserData(userData);
     userId = userData._id;
     cardsData.forEach((cardData) => {

@@ -12,7 +12,24 @@ export function createCard(
   const likeButton = cardElement.querySelector(".card__like-button");
   const likeCounter = cardElement.querySelector(".card__like-counter");
 
-  cardImage.src = cardData.link;
+  // Создаем контейнер для изображения
+  const imageContainer = document.createElement('div');
+  imageContainer.className = 'card__image-container';
+  cardImage.parentNode.insertBefore(imageContainer, cardImage);
+  imageContainer.appendChild(cardImage);
+
+  // Проверяем загрузку изображения
+  const img = new Image();
+  img.onload = () => {
+    cardImage.src = cardData.link;
+    imageContainer.classList.remove('card__image-container_no-image');
+  };
+  img.onerror = () => {
+    imageContainer.classList.add('card__image-container_no-image');
+    imageContainer.textContent = 'НЕТ ФОТО';
+  };
+  img.src = cardData.link;
+
   cardImage.alt = cardData.name;
   cardElement.querySelector(".card__title").textContent = cardData.name;
   likeCounter.textContent = cardData.likes.length;
