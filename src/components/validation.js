@@ -79,8 +79,6 @@ export function clearValidation(formElement, settings) {
 export function enableValidation(settings) {
   const formList = Array.from(document.querySelectorAll(settings.formSelector));
   formList.forEach((formElement) => {
-    formElement.addEventListener("submit", (evt) => evt.preventDefault());
     setEventListeners(formElement, settings);
-    clearValidation(formElement, settings);
   });
 }

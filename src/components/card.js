@@ -6,9 +6,7 @@ export function createCard(
   userId
 ) {
   const cardTemplate = document.querySelector("#card-template").content;
-  const cardElement = cardTemplate
-    .querySelector(".places__item")
-    .cloneNode(true);
+  const cardElement = cardTemplate.querySelector(".places__item").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
   const deleteButton = cardElement.querySelector(".card__delete-button");
   const likeButton = cardElement.querySelector(".card__like-button");
@@ -26,7 +24,7 @@ export function createCard(
   if (cardData.likes.length) {
     cardData.likes.forEach((like) => {
       if (like._id === userId) {
-        likeButton.classList.toggle("card__like-button_is-active");
+        toggleLikeButton(likeButton);
       }
     });
   }
@@ -45,4 +43,16 @@ export function createCard(
   });
 
   return cardElement;
+}
+
+export function updateLikeCard(likeCaunter, likes) {
+  likeCaunter.textContent = likes.length;
+}
+
+export function removeCardElement(cardElement) {
+  cardElement.remove();
+}
+
+export function toggleLikeButton(button) {
+  button.classList.toggle("card__like-button_is-active");
 }

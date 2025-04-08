@@ -11,7 +11,12 @@ import {
   likeCard,
   unlikeCard,
 } from "./components/api.js";
-import { createCard } from "./components/card.js";
+import {
+  createCard,
+  updateLikeCard,
+  removeCardElement,
+  toggleLikeButton,
+} from "./components/card.js";
 import { openPopup, closePopup, initPopups } from "./components/popup.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
 
@@ -55,8 +60,8 @@ function handleLikeCard(cardId, isLiked, likeButton, likeCounter) {
 
   likeAction(cardId)
     .then((updatedCard) => {
-      likeButton.classList.toggle("card__like-button_is-active");
-      likeCounter.textContent = updatedCard.likes.length;
+      toggleLikeButton(likeButton);
+      updateLikeCard(likeCounter, updatedCard.likes);
     })
     .catch((error) => {
       console.log("Ошибка обновления лайка:", error);
@@ -73,7 +78,7 @@ function handleConfirmToDeleteCard(cardId, cardElement) {
 function handleDeleteCard(cardId, cardElement) {
   deleteCard(cardId)
     .then(() => {
-      cardElement.remove();
+      removeCardElement(cardElement);
     })
     .catch((error) => {
       console.log("Ошибка при удалении карточки:", error);
@@ -97,12 +102,12 @@ function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   const name = formProfile.elements.name.value;
   const about = formProfile.elements.description.value;
-  renderLoading(true);
+  renderLoading(true, evt.submitter);
 
   editProfile(name, about)
-    .then(() => {
-      titleProfile.textContent = name;
-      descriptionProfile.textContent = about;
+    .then((res) => {
+      titleProfile.textContent = res.name;
+      descriptionProfile.textContent = res.about;
       setTimeout(() => {
         closePopup(popupProfile);
       }, 100);
@@ -111,7 +116,7 @@ function handleProfileFormSubmit(evt) {
       console.log("Ошибка обновления профиля:", error);
     })
     .finally(() => {
-      renderLoading(false);
+      renderLoading(false, evt.submitter);
     });
 }
 
@@ -119,7 +124,7 @@ function handleNewPlaceFormSubmit(evt) {
   evt.preventDefault();
   const name = formNewPlace.elements.name.value;
   const link = formNewPlace.elements.link.value;
-  renderLoading(true);
+  renderLoading(true, evt.submitter);
 
   addCard(name, link)
     .then((newCard) => {
@@ -141,18 +146,18 @@ function handleNewPlaceFormSubmit(evt) {
       console.log("Ошибка добавления карточки:", error);
     })
     .finally(() => {
-      renderLoading(false);
+      renderLoading(false, evt.submitter);
     });
 }
 
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
   const link = formAvatar.elements.link.value;
-  renderLoading(true);
+  renderLoading(true, evt.submitter);
 
   editAvatar(link)
-    .then(() => {
-      profileAvatar.style.backgroundImage = `url(${link})`;
+    .then((res) => {
+      profileAvatar.style.backgroundImage = `url(${res.avatar})`;
       setTimeout(() => {
         closePopup(popupAvatar);
       }, 100);
@@ -162,13 +167,12 @@ function handleAvatarFormSubmit(evt) {
       console.log("Ошибка при обновлении аватара:", error);
     })
     .finally(() => {
-      renderLoading(false);
+      renderLoading(false, evt.submitter);
     });
 }
 
-function renderLoading(isLoading) {
-  const popupButton = document.querySelector(".popup_is-opened .popup__button");
-  popupButton.textContent = isLoading ? "Сохранение..." : "Сохранение";
+function renderLoading(isLoading, button) {
+  button.textContent = isLoading ? "Сохранение..." : "Сохранение";
 }
 
 editButton.addEventListener("click", () => {
