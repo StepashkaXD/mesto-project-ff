@@ -10,7 +10,6 @@ const headers = {
 const testResponse = (res) => {
   if (res.ok) {
     return res.json().then(data => {
-      console.log('Получен ответ:', data);
       return data;
     });
   }

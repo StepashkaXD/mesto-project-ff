@@ -42,6 +42,8 @@ const addButton = document.querySelector(".profile__add-button");
 const avatarButton = document.querySelector(".profile__image-button");
 const confirmButton = document.querySelector(".popup__button-confirm");
 
+const loaderContainer = document.querySelector(".page__loader-container");
+
 let userId = null;
 let cardIdToDelete;
 let cardElementToDelete;
@@ -52,7 +54,7 @@ const validationConfig = {
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible"
+  errorClass: "popup__error_visible",
 };
 
 function handleLikeCard(cardId, isLiked, likeButton, likeCounter) {
@@ -86,22 +88,9 @@ function handleDeleteCard(cardId, cardElement) {
 }
 
 function openCardPopup(cardData) {
+  popupImage.src = cardData.link;
   popupImage.alt = cardData.name;
   popupCaption.textContent = cardData.name;
-
-  // Проверяем загрузку изображения
-  const img = new Image();
-  img.onload = () => {
-    popupImage.src = cardData.link;
-    popupImage.style.display = 'block';
-    popupImage.parentElement.textContent = '';
-  };
-  img.onerror = () => {
-    popupImage.style.display = 'none';
-    popupImage.parentElement.textContent = 'НЕТ ФОТО';
-  };
-  img.src = cardData.link;
-
   openPopup(popupTypeImage);
 }
 
@@ -221,8 +210,6 @@ initPopups();
 
 Promise.all([getArrayCards(), getUser()])
   .then(([cardsData, userData]) => {
-    console.log('Получены данные карточек:', cardsData);
-    console.log('Получены данные пользователя:', userData);
     updateUserData(userData);
     userId = userData._id;
     cardsData.forEach((cardData) => {
@@ -239,4 +226,7 @@ Promise.all([getArrayCards(), getUser()])
   })
   .catch((error) => {
     console.log("Ошибка при загрузке данных:", error);
+  })
+  .finally(() => {
+    loaderContainer.remove();
   });

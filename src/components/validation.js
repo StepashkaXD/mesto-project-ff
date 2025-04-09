@@ -1,4 +1,4 @@
-// Функция показа ошибки
+
 const showInputError = (formElement, inputElement, errorMessage, config) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(config.inputErrorClass);
@@ -6,7 +6,7 @@ const showInputError = (formElement, inputElement, errorMessage, config) => {
   errorElement.classList.add(config.errorClass);
 };
 
-// Функция скрытия ошибки
+
 const hideInputError = (formElement, inputElement, config) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(config.inputErrorClass);
@@ -14,7 +14,7 @@ const hideInputError = (formElement, inputElement, config) => {
   errorElement.textContent = '';
 };
 
-// Функция проверки валидности поля
+
 const checkInputValidity = (formElement, inputElement, config) => {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
@@ -29,7 +29,7 @@ const checkInputValidity = (formElement, inputElement, config) => {
   }
 };
 
-// Функция переключения состояния кнопки
+
 const toggleButtonState = (inputList, buttonElement, config) => {
   if (hasInvalidInput(inputList)) {
     buttonElement.classList.add(config.inactiveButtonClass);
@@ -40,14 +40,14 @@ const toggleButtonState = (inputList, buttonElement, config) => {
   }
 };
 
-// Функция проверки наличия невалидного поля
+
 const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
   });
 };
 
-// Функция установки слушателей
+
 const setEventListeners = (formElement, config) => {
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
@@ -62,7 +62,7 @@ const setEventListeners = (formElement, config) => {
   });
 };
 
-// Функция включения валидации
+
 export const enableValidation = (config) => {
   const formList = Array.from(document.querySelectorAll(config.formSelector));
   formList.forEach((formElement) => {
@@ -70,7 +70,7 @@ export const enableValidation = (config) => {
   });
 };
 
-// Функция очистки ошибок валидации
+
 export const clearValidation = (formElement, config) => {
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
   const buttonElement = formElement.querySelector(config.submitButtonSelector);

@@ -7,26 +7,22 @@ export function createCard(
 ) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".places__item").cloneNode(true);
+  const imageContainer = cardElement.querySelector(".card__image-container");
   const cardImage = cardElement.querySelector(".card__image");
   const deleteButton = cardElement.querySelector(".card__delete-button");
   const likeButton = cardElement.querySelector(".card__like-button");
   const likeCounter = cardElement.querySelector(".card__like-counter");
 
-  // Создаем контейнер для изображения
-  const imageContainer = document.createElement('div');
-  imageContainer.className = 'card__image-container';
-  cardImage.parentNode.insertBefore(imageContainer, cardImage);
   imageContainer.appendChild(cardImage);
 
-  // Проверяем загрузку изображения
   const img = new Image();
   img.onload = () => {
     cardImage.src = cardData.link;
-    imageContainer.classList.remove('card__image-container_no-image');
+    imageContainer.classList.remove("card__image-container_no-image");
   };
   img.onerror = () => {
-    imageContainer.classList.add('card__image-container_no-image');
-    imageContainer.textContent = 'НЕТ ФОТО';
+    imageContainer.classList.add("card__image-container_no-image");
+    imageContainer.textContent = "НЕТ ФОТО";
   };
   img.src = cardData.link;
 
