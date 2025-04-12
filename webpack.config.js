@@ -27,7 +27,7 @@ module.exports = {
         exclude: "/node_modules/",
       },
       {
-        test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
+        test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf|ico)$/,
         type: "asset/resource",
       },
       {
@@ -48,6 +48,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+      favicon: "./src/images/favicon.svg"
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),

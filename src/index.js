@@ -42,6 +42,8 @@ const addButton = document.querySelector(".profile__add-button");
 const avatarButton = document.querySelector(".profile__image-button");
 const confirmButton = document.querySelector(".popup__button-confirm");
 
+const loaderContainer = document.querySelector(".page__loader-container");
+
 let userId = null;
 let cardIdToDelete;
 let cardElementToDelete;
@@ -52,8 +54,12 @@ const validationConfig = {
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_inactive",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__input-error_active",
+  errorClass: "popup__error_visible",
 };
+
+function handleError(error, errorMessage) {
+  console.log(errorMessage, error);
+}
 
 function handleLikeCard(cardId, isLiked, likeButton, likeCounter) {
   const likeAction = isLiked ? unlikeCard : likeCard;
@@ -63,9 +69,7 @@ function handleLikeCard(cardId, isLiked, likeButton, likeCounter) {
       toggleLikeButton(likeButton);
       updateLikeCard(likeCounter, updatedCard.likes);
     })
-    .catch((error) => {
-      console.log("Ошибка обновления лайка:", error);
-    });
+    .catch((error) => handleError(error, "Ошибка обновления лайка:"));
 }
 
 function handleConfirmToDeleteCard(cardId, cardElement) {
@@ -77,12 +81,8 @@ function handleConfirmToDeleteCard(cardId, cardElement) {
 
 function handleDeleteCard(cardId, cardElement) {
   deleteCard(cardId)
-    .then(() => {
-      removeCardElement(cardElement);
-    })
-    .catch((error) => {
-      console.log("Ошибка при удалении карточки:", error);
-    });
+    .then(() => removeCardElement(cardElement))
+    .catch((error) => handleError(error, "Ошибка при удалении карточки:"));
 }
 
 function openCardPopup(cardData) {
@@ -96,6 +96,44 @@ function updateUserData(userData) {
   titleProfile.textContent = userData.name;
   descriptionProfile.textContent = userData.about;
   profileAvatar.style.backgroundImage = `url(${userData.avatar})`;
+}
+
+function validateImage(url) {
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => res(true);
+    img.onerror = () => rej(new Error("Ошибка при загрузке изображения"));
+    img.src = url;
+  });
+}
+
+function handleAvatarError() {
+  const linkInput = formAvatar.elements.link;
+  formAvatar.reset();
+  const errorElement = formAvatar.querySelector(".url-avatar-input-error");
+  linkInput.classList.add("popup__input_type_error");
+  errorElement.classList.add("popup__error_visible");
+  errorElement.textContent =
+    "Ошибка при загрузке изображения, попробуйте другую ссылку";
+}
+
+function handleAvatarFormSubmit(evt) {
+  evt.preventDefault();
+  const link = formAvatar.elements.link.value;
+  renderLoading(true, evt.submitter);
+
+  validateImage(link)
+    .then(() => editAvatar(link))
+    .then((res) => {
+      updateUserData(res);
+      setTimeout(() => closePopup(popupAvatar), 100);
+    })
+    .catch(() => {
+      handleAvatarError();
+    })
+    .finally(() => {
+      renderLoading(false, evt.submitter);
+    });
 }
 
 function handleProfileFormSubmit(evt) {
@@ -125,7 +163,6 @@ function handleNewPlaceFormSubmit(evt) {
   const name = formNewPlace.elements.name.value;
   const link = formNewPlace.elements.link.value;
   renderLoading(true, evt.submitter);
-
   addCard(name, link)
     .then((newCard) => {
       placesList.prepend(
@@ -144,27 +181,6 @@ function handleNewPlaceFormSubmit(evt) {
     })
     .catch((error) => {
       console.log("Ошибка добавления карточки:", error);
-    })
-    .finally(() => {
-      renderLoading(false, evt.submitter);
-    });
-}
-
-function handleAvatarFormSubmit(evt) {
-  evt.preventDefault();
-  const link = formAvatar.elements.link.value;
-  renderLoading(true, evt.submitter);
-
-  editAvatar(link)
-    .then((res) => {
-      profileAvatar.style.backgroundImage = `url(${res.avatar})`;
-      setTimeout(() => {
-        closePopup(popupAvatar);
-      }, 100);
-      formAvatar.reset();
-    })
-    .catch((error) => {
-      console.log("Ошибка при обновлении аватара:", error);
     })
     .finally(() => {
       renderLoading(false, evt.submitter);
@@ -224,4 +240,7 @@ Promise.all([getArrayCards(), getUser()])
   })
   .catch((error) => {
     console.log("Ошибка при загрузке данных:", error);
+  })
+  .finally(() => {
+    loaderContainer.remove();
   });

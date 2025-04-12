@@ -1,0 +1,19 @@
+.card__image-container {
+  position: relative;
+  height: 282px;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.card__image-container_no-image {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.card__image-container_no-image .card__image {
+  display: none;
+}

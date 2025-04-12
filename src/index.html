@@ -7,10 +7,17 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="icon" type="image/svg+xml" href="<%=require('./images/favicon.svg')%>" />
+    <link rel="icon" type="image/png" sizes="32x32" href="<%=require('./images/favicon-32x32.png')%>" />
+    <link rel="icon" type="image/png" sizes="16x16" href="<%=require('./images/favicon-16x16.png')%>" />
+    <link rel="shortcut icon" type="image/x-icon" href="<%=require('./images/favicon.ico')%>" />
     <title>Mesto</title>
   </head>
   <body class="page">
     <div class="page__content">
+      <div class="page__loader-container">
+        <span class="page__loader"></span>
+      </div>
       <header class="header page__section">
         <img
           src="<%=require('./images/logo.svg')%>"
@@ -35,7 +42,7 @@
         </section>
       </main>
       <footer class="footer page__section">
-        <p class="footer__copyright">© 2021 Mesto Russia</p>
+        <p class="footer__copyright">© 2025 Mesto Russia</p>
       </footer>
       <div class="popup popup_type_edit popup_is-animated">
         <div class="popup__content">
@@ -44,33 +51,31 @@
           <form class="popup__form" name="edit_profile" novalidate>
             <input
               type="text"
-              name="name"
               class="popup__input popup__input_type_name"
+              id="name"
+              name="name"
               placeholder="Имя"
-              pattern="^[a-zA-ZA-Яf-яЁё\s\-]+$"
-              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               minlength="2"
               maxlength="40"
-              id="name-input"
               required
+              pattern="[A-Za-zА-Яа-яЁё\s\-]+"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
             />
-            <span class="form__input-error name-input-error"></span>
+            <span class="popup__error name-error"></span>
             <input
               type="text"
-              name="description"
               class="popup__input popup__input_type_description"
-              placeholder="Занятие"
-              pattern="^[a-zA-ZA-Яf-яЁё\s\-]+$"
-              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+              id="description"
+              name="description"
+              placeholder="О себе"
               minlength="2"
               maxlength="200"
-              id="description-input"
               required
+              pattern="[A-Za-zА-Яа-яЁё\s\-]+"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
             />
-            <span class="form__input-error description-input-error"></span>
-            <button type="submit" class="button popup__button">
-              Сохранить
-            </button>
+            <span class="popup__error description-error"></span>
+            <button type="submit" class="popup__button">Сохранить</button>
           </form>
         </div>
       </div>
@@ -78,32 +83,30 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Новое место</h3>
-          <form class="popup__form" name="new_place">
+          <form class="popup__form" name="new_place" novalidate>
             <input
               type="text"
-              name="name"
               class="popup__input popup__input_type_card-name"
+              id="card-name"
+              name="name"
               placeholder="Название"
-              pattern="^[a-zA-ZA-Яf-яЁё\s\-]+$"
-              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               minlength="2"
               maxlength="30"
-              id="name-place-input"
               required
+              pattern="[A-Za-zА-Яа-яЁё\s\-]+"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
             />
-            <span class="form__input-error name-place-input-error"></span>
+            <span class="popup__error card-name-error"></span>
             <input
               type="url"
-              name="link"
               class="popup__input popup__input_type_url"
+              id="url"
+              name="link"
               placeholder="Ссылка на картинку"
-              id="url-place-input"
               required
             />
-            <span class="form__input-error url-place-input-error"></span>
-            <button type="submit" class="button popup__button">
-              Сохранить
-            </button>
+            <span class="popup__error url-error"></span>
+            <button type="submit" class="popup__button">Создать</button>
           </form>
         </div>
       </div>
@@ -149,6 +152,7 @@
     </div>
     <template id="card-template">
       <li class="places__item card">
+        <div class="card__image-container"></div>
         <img class="card__image" src="" alt="" />
         <button type="button" class="card__delete-button"></button>
         <div class="card__description">

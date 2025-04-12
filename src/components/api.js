@@ -9,7 +9,9 @@ const headers = {
 
 const testResponse = (res) => {
   if (res.ok) {
-    return res.json();
+    return res.json().then((data) => {
+      return data;
+    });
   }
   return Promise.reject(`Ошибка: ${res.status}`);
 };
