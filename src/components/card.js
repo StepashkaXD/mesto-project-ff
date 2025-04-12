@@ -6,7 +6,9 @@ export function createCard(
   userId
 ) {
   const cardTemplate = document.querySelector("#card-template").content;
-  const cardElement = cardTemplate.querySelector(".places__item").cloneNode(true);
+  const cardElement = cardTemplate
+    .querySelector(".places__item")
+    .cloneNode(true);
   const imageContainer = cardElement.querySelector(".card__image-container");
   const cardImage = cardElement.querySelector(".card__image");
   const deleteButton = cardElement.querySelector(".card__delete-button");
@@ -22,7 +24,7 @@ export function createCard(
   };
   img.onerror = () => {
     imageContainer.classList.add("card__image-container_no-image");
-    imageContainer.textContent = "НЕТ ФОТО";
+    imageContainer.textContent = "Упс...";
   };
   img.src = cardData.link;
 
@@ -43,11 +45,9 @@ export function createCard(
   }
 
   cardImage.addEventListener("click", () => handleImageClick(cardData));
-
   deleteButton.addEventListener("click", () =>
     handleConfirmToDeleteCard(cardData._id, cardElement)
   );
-
   likeButton.addEventListener("click", () => {
     const isLiked = likeButton.classList.contains(
       "card__like-button_is-active"
