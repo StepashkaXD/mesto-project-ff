@@ -2,6 +2,7 @@
 @font-face{font-family:Inter;font-style:normal;font-weight:400;src:url(dcba3388310e6ae77440.woff2) format("woff2")}@font-face{font-family:Inter;font-style:normal;font-weight:500;src:url(e481ef8133a3c71636e5.woff2) format("woff2")}@font-face{font-family:Inter;font-style:normal;font-weight:900;src:url(8d07d4e4ea9833df9373.woff2) format("woff2")}
 .page__content{background-color:#000;min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;display:flex;flex-direction:column}
 .page__section{box-sizing:border-box;margin:0 auto;max-width:882px;position:relative;width:100%}@media screen and (max-width:1140px){.page__section{width:calc(100% - 40px)}}
+.page__loader-container{align-items:center;background-color:rgba(0,0,0,.5);display:flex;height:100%;justify-content:center;left:0;position:fixed;width:100%;z-index:1}.page__loader{animation:rotation 1s linear infinite;border:5px solid;border-color:#fff #fff transparent;border-radius:50%;box-sizing:border-box;display:inline-block;height:100px;width:100px}@keyframes rotation{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}
 .page{background:#000}
 .header__logo{height:33px;-o-object-fit:contain;object-fit:contain;width:142px}@media screen and (max-width:480px){.header__logo{height:24px;margin:0 0 0 7px;width:104px}}
 .header{align-items:center;display:flex;flex-shrink:0;font-family:Inter,Arial,sans-serif;min-height:120px}.header:before{background:#545454;bottom:0;content:"";height:1px;left:50%;opacity:.7;position:absolute;transform:translateX(-50%);width:100%}@media screen and (max-width:480px){.header{min-height:85px}.header:before{width:calc(100% + 40px)}}
@@ -27,6 +28,7 @@
 .card__title{font-size:24px;line-height:29px;margin:0;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card__like-counter{color:#000;font-size:13px;font-weight:400;text-align:center}
 .wrapped-like{display:flex;flex-direction:column;gap:3px}
+.card__image-container{align-items:center;color:#fff;display:flex;height:282px;justify-content:center;overflow:hidden;position:relative;width:100%}.card__image-container_no-image{font-size:16px;font-weight:500}.card__image-container_no-image .card__image{display:none}
 .card{border-radius:10px;font-family:Inter,Arial,sans-serif;overflow:hidden;position:relative}
 .popup__content{background-color:#fff;border-radius:10px;box-sizing:border-box;max-width:430px;min-height:330px;padding:34px 36px;position:relative;width:100%}@media screen and (max-width:568px){.popup__content{margin-top:40px;max-width:calc(100% - 80px);padding:30px 20px;width:100%}}
 .popup__content_content_image{background:transparent;background-size:cover;border-radius:0;display:flex;height:auto;max-height:75vh;max-width:75vw;padding:0;width:auto}
@@ -37,7 +39,7 @@
 .popup__button{align-items:center;background:#000;border:none;border-radius:2px;color:#fff;display:flex;font-size:18px;height:50px;justify-content:center;line-height:22px;margin-top:48px;transition:visibility 0s,background .3s;width:100%}.popup__button:hover{background:rgba(0,0,0,.8);cursor:pointer}@media screen and (max-width:568px){.popup__button{font-size:14px;line-height:17px}}
 .popup__caption{color:#fff;font-size:12px;left:0;line-height:15px;margin:0;position:absolute;top:calc(100% + 10px)}
 .popup__image{display:block;max-height:100%;max-width:100%;-o-object-fit:cover;object-fit:cover}
-.popup__input-error_active{color:red}
+.popup__error_visible{color:red}
 .popup__input_type_error{border-bottom:1px solid red}
 .popup__button_inactive{background:#fff;border:1px solid #000;color:#000;opacity:.2}
 .popup{align-items:center;background-color:rgba(0,0,0,.5);bottom:0;display:none;font-family:Inter,Arial,sans-serif;justify-content:center;left:0;position:fixed;right:0;top:0;z-index:10}.popup_type_confirm .popup__content{min-height:181px}
